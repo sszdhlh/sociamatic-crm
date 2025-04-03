@@ -1,50 +1,124 @@
-# Zendesk 智能自助服务门户
+# Sociamatic CRM
 
-## 项目概述
+<div align="center">
 
-在传统 Zendesk 系统管理中，管理员需要频繁地手动处理配置变更、工单管理、用户请求以及自动化流程的调整。这不仅耗时，还容易出错。本项目旨在构建一个自助式管理门户，通过集成 Zendesk API、AI Agent 技术与自动化规则引擎，实现低代码/零代码的 Zendesk 管理体验，提升运维效率和客户支持水平。
+[![Next.js](https://img.shields.io/badge/Next.js-13-black)](https://nextjs.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-38B2AC)](https://tailwindcss.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-## 核心功能
+An intelligent self-service management portal for streamlined customer relationship management.
 
-1. **工单管理界面**：展示多种工单视图，支持筛选和详情查看
-2. **技术审查模块**：一键扫描 Zendesk 实例配置，检测问题并提供修复
-3. **自动化操作中心**：支持用户添加/移除、计划升级/降级等一键操作
-4. **仪表盘中心**：展示工单状态、响应时间、自动化执行次数和账单费用
-5. **AI Agent 中心**：集成 AI 回答助手，用于工单分类、FAQ 回答和处理建议
-6. **用户授权与集成**：支持通过 OAuth 授权绑定 Zendesk 实例
+</div>
 
-## 技术栈
+## Overview
 
-- 前端：Next.js + Tailwind CSS + Zustand + Chart.js
-- 后端：Node.js + Express + Supabase
-- AI 服务：OpenAI GPT-4 / 自定义向量库
-- Zendesk 集成：Zendesk REST API + OAuth2 授权机制
+Sociamatic CRM is a modern, AI-powered customer relationship management platform designed to simplify and automate customer support operations. It eliminates manual configuration overhead and reduces human error through intelligent automation and AI-assisted management.
 
-## 开发指南
+## Features
+
+### 🎫 Ticket Management
+- Multiple ticket views with advanced filtering
+- Real-time ticket status tracking
+- Bulk operations support
+- Smart ticket routing and prioritization
+
+### 🔍 Technical Review
+- Automated system configuration scanning
+- Issue detection and remediation suggestions
+- Configuration health monitoring
+- Best practices enforcement
+
+### 🤖 Automation Center
+- One-click user management operations
+- Scheduled service tier adjustments
+- Custom automation rule builder
+- Batch processing capabilities
+
+### 📊 Analytics Dashboard
+- Real-time ticket metrics
+- Response time analytics
+- Automation execution tracking
+- Cost and billing insights
+
+### 🤖 AI Assistant
+- Intelligent ticket classification
+- Automated FAQ responses
+- Smart handling suggestions
+- Natural language processing
+
+### 🔐 Authentication & Integration
+- OAuth2 authentication
+- Secure API integration
+- Role-based access control
+- SSO support
+
+## Tech Stack
+
+- **Frontend**: Next.js, Tailwind CSS, Zustand, Chart.js
+- **Backend**: Node.js, Express, Supabase
+- **AI Services**: OpenAI GPT-4, Custom Vector Database
+- **Integration**: RESTful APIs, OAuth2
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 16.x or higher
+- npm 7.x or higher
+
+### Installation
 
 ```bash
-# 安装依赖
+# Clone the repository
+git clone https://github.com/yourusername/sociamatic-crm.git
+
+# Navigate to project directory
+cd sociamatic-crm
+
+# Install dependencies
 npm install
 
-# 启动开发服务器
+# Start development server
 npm run dev
+```
 
-# 构建生产版本
+### Build and Deploy
+
+```bash
+# Build for production
 npm run build
 
-# 启动生产服务器
+# Start production server
 npm run start
 ```
 
-## 项目结构
+## Project Structure
 
 ```
 /
-├── components/       # React 组件
-├── pages/            # Next.js 页面
-├── public/           # 静态资源
-├── styles/           # 全局样式
-├── lib/              # 工具函数和 API 客户端
-├── store/            # Zustand 状态管理
-└── types/            # TypeScript 类型定义
+├── components/     # React components
+│   ├── automation/ # Automation related components
+│   ├── dashboard/  # Dashboard components
+│   ├── layout/     # Layout components
+│   ├── technical/  # Technical review components
+│   └── tickets/    # Ticket management components
+├── pages/          # Next.js pages
+├── public/         # Static assets
+├── styles/         # Global styles
+├── lib/            # Utilities and API clients
+├── store/          # Zustand state management
+└── types/          # TypeScript type definitions
 ```
+
+## Contributing
+
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Support
+
+For support and questions, please [open an issue](https://github.com/yourusername/sociamatic-crm/issues) or contact our support team.
