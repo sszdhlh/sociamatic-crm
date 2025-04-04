@@ -1,1 +1,9 @@
-{}
+{
+  "/_app": "pages/_app.js",
+  "/_document": "pages/_document.js",
+  "/_error": "pages/_error.js",
+  "/automation": "pages/automation.js",
+  "/technical-review": "pages/technical-review.js",
+  "/": "pages/index.js",
+  "/analytics": "pages/analytics.js"
+}
