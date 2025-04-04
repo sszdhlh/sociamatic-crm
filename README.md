@@ -17,11 +17,55 @@ Sociamatic CRM is a modern, AI-powered customer relationship management platform
 
 ## Features
 
+### 👥 Customer & Organization Management
+- Comprehensive customer profiles
+- Organization hierarchy management
+- Customer segmentation and tagging
+- Activity tracking and history
+- Merge duplicate customer records
+
 ### 🎫 Ticket Management
 - Multiple ticket views with advanced filtering
 - Real-time ticket status tracking
 - Bulk operations support
 - Smart ticket routing and prioritization
+- Private and public comments
+- File attachments support
+
+### 📝 Macros & Templates
+- Predefined response templates
+- Dynamic ticket field updates
+- Customizable macro actions
+- Bulk macro application
+- Template version control
+
+### 🔍 Views & Smart Filters
+- Customizable ticket views
+- Advanced search capabilities
+- Saved filter conditions
+- Personal and shared views
+- Real-time view updates
+
+### ⚡ Trigger Rules Engine
+- Event-based automation rules
+- Conditional trigger actions
+- Multi-step workflows
+- Time-based triggers
+- Rule performance monitoring
+
+### 🔄 Multi-channel Integration
+- Email integration
+- Social media channels
+- Live chat support
+- API integrations
+- Unified conversation history
+
+### ⏱️ SLA Management
+- Service level agreements
+- Business hours configuration
+- Response time tracking
+- Escalation rules
+- SLA breach notifications
 
 ### 🔍 Technical Review
 - Automated system configuration scanning
@@ -40,6 +84,7 @@ Sociamatic CRM is a modern, AI-powered customer relationship management platform
 - Response time analytics
 - Automation execution tracking
 - Cost and billing insights
+- Channel performance metrics
 
 ### 🤖 AI Assistant
 - Intelligent ticket classification
