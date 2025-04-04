@@ -175,17 +175,18 @@ export default function TicketDetail() {
 
   if (loading || !ticket) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <ArrowPathIcon className="h-8 w-8 animate-spin text-primary-600" />
+      <div>
+        <div className="flex items-center justify-center min-h-screen">
+          <ArrowPathIcon className="h-8 w-8 animate-spin text-primary-600" />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="py-6">
+    <>
       <Head>
-        <title>Ticket {ticket.id} | Sociamatic Smart Self-Service Portal</title>
-        <meta name="description" content={`Details for ticket ${ticket.id}`} />
+        <title>{ticket ? `${ticket.subject} - Ticket #${ticket.id}` : 'Loading...'} | Sociamatic CRM</title>
       </Head>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -399,6 +400,8 @@ export default function TicketDetail() {
           </div>
         </div>
       </div>
-    </div>
+
+
+    </>
   );
 }

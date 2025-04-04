@@ -10,7 +10,13 @@ import {
   CogIcon,
   ChartBarIcon,
   SparklesIcon,
-  UserGroupIcon
+  UserGroupIcon,
+  BuildingOfficeIcon,
+  UserIcon,
+  DocumentTextIcon,
+  EyeIcon,
+  BoltIcon,
+  ClockIcon
 } from '@heroicons/react/24/outline';
 
 type SidebarProps = {
@@ -26,7 +32,14 @@ const navigation = [
   { name: 'Analytics', href: '/analytics', icon: ChartBarIcon },
   { name: 'AI Assistant', href: '/ai-agent', icon: SparklesIcon },
   { name: 'User Management', href: '/user-management', icon: UserGroupIcon },
+  { name: 'Customers', href: '/customers', icon: UserIcon },
+  { name: 'Organizations', href: '/organizations', icon: BuildingOfficeIcon },
+  { name: 'Macros', href: '/macros', icon: DocumentTextIcon },
+  { name: 'Views', href: '/views', icon: EyeIcon },
+  { name: 'Triggers', href: '/triggers', icon: BoltIcon },
+  { name: 'SLA Management', href: '/sla', icon: ClockIcon },
 ];
+
 
 export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
   const router = useRouter();

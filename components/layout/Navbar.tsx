@@ -61,7 +61,7 @@ export default function Navbar({ setSidebarOpen }: NavbarProps) {
               <Menu.Button className="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
                 <span className="sr-only">Open user menu</span>
                 <div className="h-8 w-8 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center">
-                  <span className="text-sm font-medium">ZD</span>
+                  <span className="text-sm font-medium">SM</span>
                 </div>
               </Menu.Button>
             </div>

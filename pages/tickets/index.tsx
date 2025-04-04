@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Head from 'next/head';
-import { MagnifyingGlassIcon, FunnelIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
+import { MagnifyingGlassIcon, FunnelIcon, ArrowPathIcon, PlusIcon } from '@heroicons/react/24/outline';
 import TicketList from '@/components/tickets/TicketList';
 
 export default function Tickets() {
@@ -12,13 +13,13 @@ export default function Tickets() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    // 实际项目中这里应该调用API进行搜索
-    console.log('搜索:', searchQuery);
+    // In actual project, API call should be made here for search
+    console.log('Search:', searchQuery);
   };
 
   const handleRefresh = () => {
     setIsLoading(true);
-    // 模拟刷新数据
+    // Simulate data refresh
     setTimeout(() => {
       setIsLoading(false);
     }, 1000);
@@ -66,7 +67,7 @@ export default function Tickets() {
           </button>
         </div>
 
-        {/* 搜索和筛选 */}
+        {/* Search and Filter */}
         <div className="mt-6 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
           <form onSubmit={handleSearch} className="w-full sm:w-96">
             <div className="relative rounded-md shadow-sm">
@@ -106,7 +107,7 @@ export default function Tickets() {
           </div>
         </div>
 
-        {/* 筛选面板 */}
+        {/* Filter Panel */}
         {filterOpen && (
           <div className="mt-4 p-4 bg-white shadow rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -172,9 +173,19 @@ export default function Tickets() {
           </div>
         )}
 
-        {/* 工单列表 */}
+        {/* Ticket List */}
         <div className="mt-6 bg-white shadow overflow-hidden sm:rounded-md">
           <TicketList limit={20} />
+        </div>
+        {/* Create Ticket Button */}
+        <div className="mt-6 flex justify-end">
+          <Link
+            href="/tickets/create"
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+          >
+            <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+            Create Ticket
+          </Link>
         </div>
       </div>
     </div>

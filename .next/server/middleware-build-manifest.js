@@ -24,15 +24,15 @@ self.__BUILD_MANIFEST = {
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/automation": [
+    "/user-management": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/automation.js"
+      "static/chunks/pages/user-management.js"
     ],
-    "/technical-review": [
+    "/views": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/technical-review.js"
+      "static/chunks/pages/views.js"
     ]
   },
   "ampFirstPages": []
