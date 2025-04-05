@@ -3,8 +3,26 @@ import DashboardStats from '@/components/dashboard/DashboardStats';
 import TicketList from '@/components/tickets/TicketList';
 import TechnicalReviewCard from '@/components/technical/TechnicalReviewCard';
 import AutomationCard from '@/components/automation/AutomationCard';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Home() {
+  // 使用认证上下文
+  const { isAuthenticated, loading, user } = useAuth();
+  
+  // 如果认证状态正在加载，显示加载中
+  if (loading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  // 如果未认证，不显示内容 - AuthContext会自动处理重定向
+  if (!isAuthenticated) {
+    return null;
+  }
+  
   // Simulated data - should be obtained from the API in actual projects
   const dashboardData = {
     openTickets: 24,
@@ -26,6 +44,12 @@ export default function Home() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
+        
+        {user && (
+          <div className="mb-4 p-4 bg-blue-50 rounded-lg">
+            <p className="text-blue-800">欢迎, {user.name}!</p>
+          </div>
+        )}
         
         {/* Statistics Cards */}
         <DashboardStats data={dashboardData} />

@@ -1,4 +1,5 @@
 import { ReactNode, useState } from 'react';
+import { useRouter } from 'next/router';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
 
@@ -8,7 +9,17 @@ type LayoutProps = {
 
 export default function Layout({ children }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const router = useRouter();
   
+  // Check if current page is login or register
+  const isAuthPage = router.pathname === '/login' || router.pathname === '/register';
+  
+  // If it's login or register page, render without sidebar and navbar
+  if (isAuthPage) {
+    return <>{children}</>;
+  }
+  
+  // For authenticated pages, render with sidebar and navbar
   return (
     <div className="h-screen flex overflow-hidden bg-gray-50">
       {/* Sidebar */}

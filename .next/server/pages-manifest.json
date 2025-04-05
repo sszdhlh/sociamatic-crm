@@ -3,7 +3,5 @@
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
   "/": "pages/index.js",
-  "/analytics": "pages/analytics.js",
-  "/views": "pages/views.js",
-  "/user-management": "pages/user-management.js"
+  "/settings": "pages/settings.js"
 }
