@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -16,8 +16,11 @@ import {
   DocumentTextIcon,
   EyeIcon,
   BoltIcon,
-  ClockIcon
+  ClockIcon,
+  ArrowRightOnRectangleIcon
 } from '@heroicons/react/24/outline';
+import { useAuth } from '@/contexts/AuthContext';
+import ConfirmDialog from './ConfirmDialog';
 
 type SidebarProps = {
   sidebarOpen: boolean;
@@ -43,6 +46,24 @@ const navigation = [
 
 export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
   const router = useRouter();
+  const { logout, user } = useAuth();
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  
+  const userInitials = user?.name ? user.name.substring(0, 2).toUpperCase() : 'SM';
+  const userName = user?.name || 'Sociamatic Admin';
+  
+  const handleLogoutClick = () => {
+    setShowLogoutConfirm(true);
+  };
+
+  const handleConfirmLogout = () => {
+    setShowLogoutConfirm(false);
+    logout();
+  };
+
+  const handleCancelLogout = () => {
+    setShowLogoutConfirm(false);
+  };
   
   return (
     <>
@@ -120,17 +141,32 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                 </nav>
               </div>
               <div className="flex-shrink-0 flex border-t border-gray-200 p-4">
-                <div className="flex-shrink-0 group block">
-                  <div className="flex items-center">
+                <div className="flex-shrink-0 group block w-full">
+                  <div className="flex items-center mb-2">
                     <div>
                       <div className="inline-block h-9 w-9 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center">
-                        <span className="text-sm font-medium">SM</span>
+                        <span className="text-sm font-medium">{userInitials}</span>
                       </div>
                     </div>
                     <div className="ml-3">
-                      <p className="text-base font-medium text-gray-700 group-hover:text-gray-900">Sociamatic Admin</p>
-                      <Link href="/settings" className="text-sm font-medium text-gray-500 group-hover:text-gray-700">View Settings</Link>
+                      <p className="text-base font-medium text-gray-700 group-hover:text-gray-900">{userName}</p>
                     </div>
+                  </div>
+                  <div className="flex w-full justify-between">
+                    <Link 
+                      href="/settings" 
+                      className="flex items-center px-3 py-2 text-sm font-medium text-gray-500 rounded-md hover:bg-gray-50 hover:text-gray-700"
+                    >
+                      <CogIcon className="h-5 w-5 mr-2" />
+                      Settings
+                    </Link>
+                    <button 
+                      onClick={handleLogoutClick}
+                      className="flex items-center px-3 py-2 text-sm font-medium text-gray-500 rounded-md hover:bg-gray-50 hover:text-gray-700"
+                    >
+                      <ArrowRightOnRectangleIcon className="h-5 w-5 mr-2" />
+                      Sign Out
+                    </button>
                   </div>
                 </div>
               </div>
@@ -175,22 +211,48 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
             </div>
             <div className="flex-shrink-0 flex border-t border-gray-200 p-4">
               <div className="flex-shrink-0 w-full group block">
-                <div className="flex items-center">
+                <div className="flex items-center mb-2">
                   <div>
                     <div className="inline-block h-9 w-9 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center">
-                      <span className="text-sm font-medium">SM</span>
+                      <span className="text-sm font-medium">{userInitials}</span>
                     </div>
                   </div>
                   <div className="ml-3">
-                    <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">Sociamatic Admin</p>
-                    <Link href="/settings" className="text-xs font-medium text-gray-500 group-hover:text-gray-700">View Settings</Link>
+                    <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">{userName}</p>
                   </div>
+                </div>
+                <div className="flex justify-between">
+                  <Link 
+                    href="/settings" 
+                    className="flex items-center px-3 py-1.5 text-xs font-medium text-gray-500 rounded-md hover:bg-gray-50 hover:text-gray-700"
+                  >
+                    <CogIcon className="h-4 w-4 mr-1.5" />
+                    Settings
+                  </Link>
+                  <button 
+                    onClick={handleLogoutClick}
+                    className="flex items-center px-3 py-1.5 text-xs font-medium text-gray-500 rounded-md hover:bg-gray-50 hover:text-gray-700"
+                  >
+                    <ArrowRightOnRectangleIcon className="h-4 w-4 mr-1.5" />
+                    Sign Out
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Logout Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={showLogoutConfirm}
+        title="Sign Out"
+        message="Are you sure you want to sign out of your account?"
+        confirmText="Sign Out" 
+        cancelText="Cancel"
+        onConfirm={handleConfirmLogout}
+        onCancel={handleCancelLogout}
+      />
     </>
   );
 }

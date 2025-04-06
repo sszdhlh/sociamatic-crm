@@ -6,10 +6,10 @@ import AutomationCard from '@/components/automation/AutomationCard';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function Home() {
-  // 使用认证上下文
+  // Use authentication context
   const { isAuthenticated, loading, user } = useAuth();
   
-  // 如果认证状态正在加载，显示加载中
+  // If the authentication status is loading, show loading indicator
   if (loading) {
     return (
       <div className="min-h-screen flex justify-center items-center">
@@ -18,7 +18,7 @@ export default function Home() {
     );
   }
 
-  // 如果未认证，不显示内容 - AuthContext会自动处理重定向
+  // If not authenticated, don't display content - AuthContext will handle redirection automatically
   if (!isAuthenticated) {
     return null;
   }
@@ -47,7 +47,7 @@ export default function Home() {
         
         {user && (
           <div className="mb-4 p-4 bg-blue-50 rounded-lg">
-            <p className="text-blue-800">欢迎, {user.name}!</p>
+            <p className="text-blue-800">Welcome, {user.name}!</p>
           </div>
         )}
         

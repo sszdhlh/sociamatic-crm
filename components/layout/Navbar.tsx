@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import Link from 'next/link';
 import {
@@ -9,12 +9,32 @@ import {
   ArrowRightOnRectangleIcon,
   Cog6ToothIcon
 } from '@heroicons/react/24/outline';
+import { useAuth } from '@/contexts/AuthContext';
+import ConfirmDialog from './ConfirmDialog';
 
 type NavbarProps = {
   setSidebarOpen: (open: boolean) => void;
 };
 
 export default function Navbar({ setSidebarOpen }: NavbarProps) {
+  const { logout, user } = useAuth();
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  
+  const userInitials = user?.name ? user.name.substring(0, 2).toUpperCase() : 'SM';
+
+  const handleLogoutClick = () => {
+    setShowLogoutConfirm(true);
+  };
+
+  const handleConfirmLogout = () => {
+    setShowLogoutConfirm(false);
+    logout();
+  };
+
+  const handleCancelLogout = () => {
+    setShowLogoutConfirm(false);
+  };
+
   return (
     <div className="sticky top-0 z-10 flex-shrink-0 flex h-16 bg-white shadow">
       <button
@@ -46,7 +66,7 @@ export default function Navbar({ setSidebarOpen }: NavbarProps) {
           </form>
         </div>
         <div className="ml-4 flex items-center md:ml-6">
-          {/* 通知按钮 */}
+          {/* Notification button */}
           <button
             type="button"
             className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
@@ -55,13 +75,13 @@ export default function Navbar({ setSidebarOpen }: NavbarProps) {
             <BellIcon className="h-6 w-6" aria-hidden="true" />
           </button>
 
-          {/* 用户菜单 */}
+          {/* User menu */}
           <Menu as="div" className="ml-3 relative">
             <div>
               <Menu.Button className="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
                 <span className="sr-only">Open user menu</span>
                 <div className="h-8 w-8 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center">
-                  <span className="text-sm font-medium">SM</span>
+                  <span className="text-sm font-medium">{userInitials}</span>
                 </div>
               </Menu.Button>
             </div>
@@ -99,13 +119,13 @@ export default function Navbar({ setSidebarOpen }: NavbarProps) {
                 </Menu.Item>
                 <Menu.Item>
                   {({ active }) => (
-                    <a
-                      href="#"
-                      className={`${active ? 'bg-gray-100' : ''} flex items-center px-4 py-2 text-sm text-gray-700`}
+                    <button
+                      onClick={handleLogoutClick}
+                      className={`${active ? 'bg-gray-100' : ''} flex items-center px-4 py-2 text-sm text-gray-700 w-full text-left`}
                     >
                       <ArrowRightOnRectangleIcon className="mr-3 h-5 w-5 text-gray-400" aria-hidden="true" />
                       Sign Out
-                    </a>
+                    </button>
                   )}
                 </Menu.Item>
               </Menu.Items>
@@ -113,6 +133,17 @@ export default function Navbar({ setSidebarOpen }: NavbarProps) {
           </Menu>
         </div>
       </div>
+
+      {/* Logout Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={showLogoutConfirm}
+        title="Sign Out"
+        message="Are you sure you want to sign out of your account?"
+        confirmText="Sign Out"
+        cancelText="Cancel"
+        onConfirm={handleConfirmLogout}
+        onCancel={handleCancelLogout}
+      />
     </div>
   );
 }
