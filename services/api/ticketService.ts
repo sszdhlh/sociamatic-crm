@@ -1,4 +1,7 @@
-import apiClient from './apiClient';
+import apiClient from './apiClient';import axios from 'axios';
+
+// API base configuration from apiClient
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
 
 export interface Ticket {
   id: string;
@@ -71,21 +74,60 @@ export interface TicketListResponse {
 }
 
 /**
- * 工单服务，提供工单的增删改查功能
+ * Ticket service, provides CRUD operations for tickets
  */
 const ticketService = {
   /**
-   * 创建工单
-   * @param data 工单创建请求数据
+   * Create a ticket
+   * @param data Ticket creation request data
    */
   createTicket: async (data: CreateTicketRequest): Promise<Ticket> => {
     const response = await apiClient.post<Ticket>('/tickets', data);
     return response.data;
   },
+
+  /**
+   * Create a ticket with file attachments
+   * @param data Ticket creation request data
+   * @param files Array of files to upload
+   */
+  createTicketWithFiles: async (data: Omit<CreateTicketRequest, 'attachments'>, files: File[]): Promise<Ticket> => {
+    try {
+      // First upload files to get attachment IDs
+      const uploadPromises = files.map(async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        const response = await axios.post(`${API_BASE_URL}/uploads`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+          },
+        });
+        
+        return response.data.id; // Assuming the upload endpoint returns an ID for the uploaded file
+      });
+      
+      // Wait for all uploads to complete
+      const attachmentIds = await Promise.all(uploadPromises);
+      
+      // Now create the ticket with attachment references
+      const ticketData: CreateTicketRequest = {
+        ...data,
+        attachments: attachmentIds,
+      };
+      
+      // Use the regular createTicket method to create the ticket with attachment references
+      return await ticketService.createTicket(ticketData);
+    } catch (error) {
+      console.error('Error in createTicketWithFiles:', error);
+      throw error;
+    }
+  },
   
   /**
-   * 获取工单列表
-   * @param params 过滤和分页参数
+   * Get ticket list
+   * @param params Filtering and pagination parameters
    */
   getTickets: async (params?: TicketListParams): Promise<TicketListResponse> => {
     const response = await apiClient.get<TicketListResponse>('/tickets', { params });
@@ -93,8 +135,8 @@ const ticketService = {
   },
   
   /**
-   * 获取工单详情
-   * @param id 工单ID
+   * Get ticket details
+   * @param id Ticket ID
    */
   getTicketById: async (id: string): Promise<Ticket> => {
     const response = await apiClient.get<Ticket>(`/tickets/${id}`);
@@ -102,9 +144,9 @@ const ticketService = {
   },
   
   /**
-   * 更新工单
-   * @param id 工单ID
-   * @param data 更新数据
+   * Update ticket
+   * @param id Ticket ID
+   * @param data Update data
    */
   updateTicket: async (id: string, data: UpdateTicketRequest): Promise<Ticket> => {
     const response = await apiClient.put<Ticket>(`/tickets/${id}`, data);
@@ -112,17 +154,17 @@ const ticketService = {
   },
   
   /**
-   * 删除工单
-   * @param id 工单ID
+   * Delete ticket
+   * @param id Ticket ID
    */
   deleteTicket: async (id: string): Promise<void> => {
     await apiClient.delete(`/tickets/${id}`);
   },
   
   /**
-   * 添加工单评论
-   * @param ticketId 工单ID
-   * @param data 评论数据
+   * Add ticket comment
+   * @param ticketId Ticket ID
+   * @param data Comment data
    */
   addComment: async (ticketId: string, data: CreateTicketCommentRequest): Promise<TicketComment> => {
     const response = await apiClient.post<TicketComment>(`/tickets/${ticketId}/comments`, data);
@@ -130,8 +172,8 @@ const ticketService = {
   },
   
   /**
-   * 获取工单评论
-   * @param ticketId 工单ID
+   * Get ticket comments
+   * @param ticketId Ticket ID
    */
   getComments: async (ticketId: string): Promise<TicketComment[]> => {
     const response = await apiClient.get<TicketComment[]>(`/tickets/${ticketId}/comments`);
@@ -139,4 +181,4 @@ const ticketService = {
   }
 };
 
-export default ticketService; 
+export default ticketService;

@@ -3,6 +3,8 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Layout from '@/components/layout/Layout';
 import { PaperAirplaneIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import FileUpload from '@/components/common/FileUpload';
+import ticketService from '@/services/api/ticketService';
 
 export default function CreateTicket() {
   const router = useRouter();
@@ -14,7 +16,9 @@ export default function CreateTicket() {
     tags: ''
   });
   
+  const [files, setFiles] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [uploadError, setUploadError] = useState<string>('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -24,19 +28,43 @@ export default function CreateTicket() {
     }));
   };
 
+  const handleFilesChange = (newFiles: File[]) => {
+    setFiles(newFiles);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setUploadError('');
     
-    // In a real application, you would send this data to your API
-    console.log('Creating ticket with data:', formData);
-    
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      // Redirect to tickets list after successful creation
+    try {
+      // 准备提交的数据
+      const ticketData = {
+        title: formData.subject,
+        description: formData.description,
+        priority: formData.priority as 'high' | 'medium' | 'low',
+        customerId: formData.requester || 'default-customer-id', // 假设有默认客户ID
+        // 如果有标签，将其转换为数组
+        customFields: formData.tags ? { tags: formData.tags.split(',').map(tag => tag.trim()) } : undefined
+      };
+      
+      console.log('Creating ticket with data:', ticketData);
+      console.log('Files to upload:', files);
+      
+      // 如果有文件，使用带文件上传的方法
+      if (files.length > 0) {
+        await ticketService.createTicketWithFiles(ticketData, files);
+      } else {
+        await ticketService.createTicket(ticketData);
+      }
+      
+      // 成功后重定向到工单列表
       router.push('/tickets');
-    }, 1000);
+    } catch (error) {
+      console.error('Failed to create ticket:', error);
+      setUploadError('Failed to create ticket, please try again');
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -141,6 +169,24 @@ export default function CreateTicket() {
                 />
               </div>
             </div>
+
+            <div className="mt-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Attachments
+              </label>
+              <FileUpload 
+                onFilesChange={handleFilesChange}
+                maxFiles={5}
+                maxSize={10 * 1024 * 1024} // 10MB
+              />
+              <p className="text-xs text-gray-500 mt-1">Supports images, PDF, Office documents and other common file formats</p>
+            </div>
+
+            {uploadError && (
+              <div className="mt-4 p-3 bg-red-50 text-red-700 rounded-md">
+                {uploadError}
+              </div>
+            )}
 
             <div className="mt-6 flex justify-end">
               <button
