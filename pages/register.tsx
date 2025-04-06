@@ -13,9 +13,9 @@ const RegisterPage = () => {
       </Head>
       
       <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center px-4">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-blue-600">Sociamatic CRM</h1>
-          <p className="text-gray-600 text-center mt-2">Customer Relationship Management System</p>
+        <div className="text-center mb-10 max-w-md px-4">
+          <h1 className="text-4xl font-bold text-blue-600 tracking-tight">Sociamatic CRM</h1>
+          <p className="text-gray-600 mt-3 text-lg">Customer Relationship Management System</p>
         </div>
         
         <RegisterForm />
