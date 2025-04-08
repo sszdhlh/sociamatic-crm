@@ -75,14 +75,15 @@ apiClient.interceptors.response.use(
         if (refreshToken) {
           console.log('Attempting to refresh token...');
           
-          const response = await axios.post(`${API_BASE_URL}/auth/refresh-token`, {
+          const response = await axios.post(`${API_BASE_URL}/auth/refresh`, {
             refreshToken
           });
           
-          const { accessToken } = response.data;
+          const { accessToken, refreshToken: newRefreshToken } = response.data.data.tokens;
           
-          // Save new access token
+          // Save new tokens
           localStorage.setItem('accessToken', accessToken);
+          localStorage.setItem('refreshToken', newRefreshToken);
           
           // Update Authorization header for failed request
           originalRequest.headers.Authorization = `Bearer ${accessToken}`;
@@ -95,16 +96,26 @@ apiClient.interceptors.response.use(
       } catch (refreshError) {
         console.error('Failed to refresh token:', refreshError);
         
-        // Refresh token failed, clear local storage and redirect to login
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('user');
-        
-        // Redirect in browser environment
-        if (typeof window !== 'undefined') {
-          console.log('Redirecting to login page due to auth failure');
-          window.location.href = '/login';
+        // 检查是否真的需要重新登录
+        const errorResponse = (refreshError as AxiosError).response;
+        if (errorResponse?.status === 401 || errorResponse?.status === 403) {
+          // 只有在明确的认证错误时才清除认证信息并重定向
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
+          localStorage.removeItem('user');
+          
+          // 使用setTimeout来避免立即重定向导致的闪退
+          if (typeof window !== 'undefined') {
+            console.log('Token已失效，即将重定向到登录页面');
+            setTimeout(() => {
+              window.location.href = '/login';
+            }, 1000);
+          }
+          return Promise.reject(new Error('认证已过期，请重新登录'));
         }
+        // 对于其他错误（如网络问题），保持当前会话
+        console.error('Token刷新失败，但不是认证错误，保持当前会话');
+        return Promise.reject(refreshError);
       }
     }
     
@@ -119,4 +130,4 @@ apiClient.interceptors.response.use(
   }
 );
 
-export default apiClient; 
+export default apiClient;
