@@ -96,25 +96,25 @@ apiClient.interceptors.response.use(
       } catch (refreshError) {
         console.error('Failed to refresh token:', refreshError);
         
-        // 检查是否真的需要重新登录
+        // Check if re-login is really needed
         const errorResponse = (refreshError as AxiosError).response;
         if (errorResponse?.status === 401 || errorResponse?.status === 403) {
-          // 只有在明确的认证错误时才清除认证信息并重定向
+          // Only clear auth info and redirect on explicit authentication errors
           localStorage.removeItem('accessToken');
           localStorage.removeItem('refreshToken');
           localStorage.removeItem('user');
           
-          // 使用setTimeout来避免立即重定向导致的闪退
+          // Use setTimeout to prevent immediate redirect flash
           if (typeof window !== 'undefined') {
-            console.log('Token已失效，即将重定向到登录页面');
+            console.log('Token expired, redirecting to login page');
             setTimeout(() => {
               window.location.href = '/login';
             }, 1000);
           }
-          return Promise.reject(new Error('认证已过期，请重新登录'));
+          return Promise.reject(new Error('Authentication expired, please login again'));
         }
-        // 对于其他错误（如网络问题），保持当前会话
-        console.error('Token刷新失败，但不是认证错误，保持当前会话');
+        // For other errors (like network issues), maintain current session
+        console.error('Token refresh failed, but not an auth error, maintaining current session');
         return Promise.reject(refreshError);
       }
     }

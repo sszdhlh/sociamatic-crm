@@ -12,7 +12,7 @@ const nextConfig = {
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
   },
   webpack: (config, { isServer }) => {
-    // 解决pg-connection-string中fs模块的问题
+    // Resolve fs module issue in pg-connection-string
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,

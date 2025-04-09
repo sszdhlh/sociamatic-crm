@@ -39,7 +39,7 @@ export default function AutomationCard() {
   const handleAction = (type: AutomationRequest['type'], details: string) => {
     setProcessing(true);
     
-    // 模拟API调用
+    // Simulate API call
     setTimeout(() => {
       const newRequest: AutomationRequest = {
         id: `req-${Math.floor(Math.random() * 1000)}`,

@@ -22,7 +22,7 @@ export {
   integrationService
 };
 
-// 类型导出
+// Type exports
 export type { LoginRequest, RegisterRequest, AuthResponse } from './authService';
 export type {
   Ticket,
@@ -78,4 +78,4 @@ export type {
 export type {
   EmailConfig,
   ChatWidgetConfig
-} from './integrationService'; 
+} from './integrationService';

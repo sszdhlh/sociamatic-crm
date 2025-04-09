@@ -11,14 +11,14 @@ const DashboardPage = () => {
   const router = useRouter();
   const { isAuthenticated, loading, user } = useAuth();
   
-  // 检查用户是否已登录
+  // Check if user is logged in
   useEffect(() => {
     if (!loading && !isAuthenticated) {
       router.push('/login');
     }
   }, [isAuthenticated, loading, router]);
 
-  // 如果认证状态正在加载，显示加载
+  // Show loading while authentication state is being checked
   if (loading) {
     return (
       <div className="min-h-screen flex justify-center items-center">
@@ -27,7 +27,7 @@ const DashboardPage = () => {
     );
   }
 
-  // 如果未认证，不显示内容
+  // Don't show content if not authenticated
   if (!isAuthenticated) {
     return null;
   }
@@ -35,16 +35,16 @@ const DashboardPage = () => {
   return (
     <>
       <Head>
-        <title>仪表盘 | Sociamatic CRM</title>
-        <meta name="description" content="Sociamatic CRM系统仪表盘" />
+        <title>Dashboard | Sociamatic CRM</title>
+        <meta name="description" content="Sociamatic CRM System Dashboard" />
       </Head>
       
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold mb-8">仪表盘</h1>
+        <h1 className="text-2xl font-bold mb-8">Dashboard</h1>
         
         {user && (
           <div className="mb-4 p-4 bg-blue-50 rounded-lg">
-            <p className="text-blue-800">欢迎, {user.name}!</p>
+            <p className="text-blue-800">Welcome, {user.name}!</p>
           </div>
         )}
         
@@ -53,11 +53,11 @@ const DashboardPage = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* 此处可添加其他仪表盘组件 */}
+          {/* Add other dashboard components here */}
         </div>
       </div>
     </>
   );
 };
 
-export default DashboardPage; 
+export default DashboardPage;

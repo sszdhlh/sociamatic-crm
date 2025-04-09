@@ -18,12 +18,12 @@ const LoginForm = () => {
       setLoading(true);
       setError(null);
       
-      // 调用登录方法
+      // Call login method
       await login(email, password);
       
     } catch (err: any) {
-      console.error('登录失败:', err);
-      setError(err.response?.data?.message || '登录失败，请检查您的凭据');
+      console.error('Login failed:', err);
+      setError(err.response?.data?.message || 'Login failed, please check your credentials');
     } finally {
       setLoading(false);
     }
@@ -80,4 +80,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm; 
+export default LoginForm;
