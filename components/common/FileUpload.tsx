@@ -8,14 +8,20 @@ interface FileUploadProps {
   maxSize?: number; // in bytes
   acceptedFileTypes?: string[];
   className?: string;
+  showPreview?: boolean;
+  onUploadProgress?: (progress: number) => void;
+  validateFile?: (file: File) => boolean | string;
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({
   onFilesChange,
   maxFiles = 5,
-  maxSize = 5 * 1024 * 1024, // 5MB default
+  maxSize = 10 * 1024 * 1024, // 10MB default
   acceptedFileTypes = ['image/*', 'application/pdf', '.doc', '.docx', '.xls', '.xlsx', '.txt'],
   className = '',
+  showPreview = true,
+  onUploadProgress,
+  validateFile
 }) => {
   const [files, setFiles] = useState<File[]>([]);
   const [errors, setErrors] = useState<string[]>([]);

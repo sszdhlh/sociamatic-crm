@@ -1,4 +1,4 @@
-import apiClient from './apiClient';import axios from 'axios';
+import apiClient from './apiClient';
 
 // API base configuration from apiClient
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
@@ -87,6 +87,34 @@ const ticketService = {
   },
 
   /**
+   * Get tickets list with pagination and filters
+   * @param params Filter and pagination parameters
+   */
+  getTickets: async (params: TicketListParams): Promise<TicketListResponse> => {
+    const response = await apiClient.get<TicketListResponse>('/tickets', { params });
+    return response.data;
+  },
+
+  /**
+   * Add comment to a ticket
+   * @param ticketId Ticket ID
+   * @param data Comment data
+   */
+  addComment: async (ticketId: string, data: CreateTicketCommentRequest): Promise<TicketComment> => {
+    const response = await apiClient.post<TicketComment>(`/tickets/${ticketId}/comments`, data);
+    return response.data;
+  },
+
+  /**
+   * Get ticket comments
+   * @param ticketId Ticket ID
+   */
+  getComments: async (ticketId: string): Promise<TicketComment[]> => {
+    const response = await apiClient.get<TicketComment[]>(`/tickets/${ticketId}/comments`);
+    return response.data;
+  },
+
+  /**
    * Create a ticket with file attachments
    * @param data Ticket creation request data
    * @param files Array of files to upload
@@ -97,43 +125,31 @@ const ticketService = {
       const uploadPromises = files.map(async (file) => {
         const formData = new FormData();
         formData.append('file', file);
-        
-        const response = await axios.post(`${API_BASE_URL}/uploads`, formData, {
+        formData.append('type', 'ticket-attachment');
+
+        const response = await apiClient.post('/upload', formData, {
           headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-          },
+            'Content-Type': 'multipart/form-data'
+          }
         });
-        
-        return response.data.id; // Assuming the upload endpoint returns an ID for the uploaded file
+        return response.data.fileId;
       });
-      
-      // Wait for all uploads to complete
+
       const attachmentIds = await Promise.all(uploadPromises);
-      
-      // Now create the ticket with attachment references
+
+      // Create ticket with attachment IDs
       const ticketData: CreateTicketRequest = {
         ...data,
-        attachments: attachmentIds,
+        attachments: attachmentIds
       };
-      
-      // Use the regular createTicket method to create the ticket with attachment references
+
       return await ticketService.createTicket(ticketData);
     } catch (error) {
       console.error('Error in createTicketWithFiles:', error);
       throw error;
     }
   },
-  
-  /**
-   * Get ticket list
-   * @param params Filtering and pagination parameters
-   */
-  getTickets: async (params?: TicketListParams): Promise<TicketListResponse> => {
-    const response = await apiClient.get<TicketListResponse>('/tickets', { params });
-    return response.data;
-  },
-  
+
   /**
    * Get ticket details
    * @param id Ticket ID
@@ -142,7 +158,7 @@ const ticketService = {
     const response = await apiClient.get<Ticket>(`/tickets/${id}`);
     return response.data;
   },
-  
+
   /**
    * Update ticket
    * @param id Ticket ID
@@ -152,32 +168,13 @@ const ticketService = {
     const response = await apiClient.put<Ticket>(`/tickets/${id}`, data);
     return response.data;
   },
-  
+
   /**
    * Delete ticket
    * @param id Ticket ID
    */
   deleteTicket: async (id: string): Promise<void> => {
     await apiClient.delete(`/tickets/${id}`);
-  },
-  
-  /**
-   * Add ticket comment
-   * @param ticketId Ticket ID
-   * @param data Comment data
-   */
-  addComment: async (ticketId: string, data: CreateTicketCommentRequest): Promise<TicketComment> => {
-    const response = await apiClient.post<TicketComment>(`/tickets/${ticketId}/comments`, data);
-    return response.data;
-  },
-  
-  /**
-   * Get ticket comments
-   * @param ticketId Ticket ID
-   */
-  getComments: async (ticketId: string): Promise<TicketComment[]> => {
-    const response = await apiClient.get<TicketComment[]>(`/tickets/${ticketId}/comments`);
-    return response.data;
   }
 };
 
